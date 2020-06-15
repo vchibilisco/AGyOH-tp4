@@ -3,42 +3,33 @@
 % graf: 1 para graficar, 0 para no graficar
 
 % Return
-% ArrayVapors: Array con los vapores que fueron calculados en cada instante
+% allArrayVapores: Array con los vapores que fueron calculados en cada instante
 % Penalty: valor asignado cuando un consumo de vapor es 0 cuando el tiempo
 %          es diferente a 0 o al tiempo máximo de corrida
 
-function [ArrayVapors, Penalty] = EvaluateIndividualBasedOnTotalExecTime(X, TimeProcess, graf)
+function [allArraySteam] = EvaluateIndividualBasedOnTotalExecTime(X, TimeProcess, graf)
   allArrayHoras = [];
-  allArrayVapores = [];
+  allArraySteam = [];
   allArrayMinutes = [];
 
   ArrayHours = [];
-  ArrayVapors = [];
-
-  Penalty = 0;
+  ArraySteam = [];
 
   for t=0:TimeProcess
     tInH = t/60;
 
-    [SteamTotal, ArrayHours, ArrayVapors] = GetSteamTotalByIndividual(X, tInH, ArrayHours, ArrayVapors);
+    [SteamTotal, ArrayHours, ArraySteam] = GetSteamTotalByIndividual(X, tInH, ArrayHours, ArraySteam);
 
     allArrayHoras = [allArrayHoras tInH];
-    allArrayVapores = [allArrayVapores SteamTotal];
+    allArraySteam = [allArraySteam SteamTotal];
     allArrayMinutes = [allArrayMinutes t];
-
-    if SteamTotal == 0 && t ~= 0 && t ~= TimeProcess
-      Penalty = Penalty + 1;
-    end
-    if SteamTotal > 0 && SteamTotal < 1
-      Penalty = Penalty - 1;
-    end
   end
 
   if graf == 1
     figure(2);
-    plot(ArrayHours, ArrayVapors, allArrayHoras, allArrayVapores);
+    plot(ArrayHours, ArraySteam, allArrayHoras, allArraySteam);
 
     figure(3);
-    plot(allArrayMinutes,allArrayVapores);
+    plot(allArrayMinutes,allArraySteam);
   end
 end

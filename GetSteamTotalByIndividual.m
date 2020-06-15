@@ -10,7 +10,7 @@
 % ArrayHours
 % ArrayVapors
 
-function [SteamTotal, ArrayHours, ArrayVapors] = GetSteamTotalByIndividual(individual, tInH, ArrayHours, ArrayVapors)
+function [SteamTotal, ArrayHours, ArraySteam] = GetSteamTotalByIndividual(individual, tInH, ArrayHours, ArraySteam)
     CalcSteam = @(t,t0) 1-(2*(t-t0)-1)^2;
 
     SteamTotal = 0;
@@ -22,7 +22,7 @@ function [SteamTotal, ArrayHours, ArrayVapors] = GetSteamTotalByIndividual(indiv
             vap = CalcSteam(tInH, t0InH);
             SteamTotal = SteamTotal + vap;
             ArrayHours = [ArrayHours tInH];
-            ArrayVapors = [ArrayVapors vap];
+            ArraySteam = [ArraySteam vap];
         end
     end
 end

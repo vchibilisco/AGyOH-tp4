@@ -5,8 +5,11 @@
 % ResultTotal: valor de fitness
 
 function [ResultTotal] = EvalFunction(X, TimeProcess)
-    [ArrayVapors, Penalty] = EvaluateIndividualBasedOnTotalExecTime(X, TimeProcess, 0);
-    [DiffMaxMin] = DiffSteam(ArrayVapors);
+    [ArraySteam] = EvaluateIndividualBasedOnTotalExecTime(X, TimeProcess, 0);
+    [DiffMaxMin] = DiffSteam(ArraySteam);
+    [DiffLIwithTP] = DiffTime(X);
+    [Penalty] = PenaltyFunction(ArraySteam,TimeProcess);
+    [calArea] = CalArea(ArraySteam);
     
-    ResultTotal = (15 * DiffMaxMin) - (12 * Penalty);
+    ResultTotal = (5 * DiffMaxMin) + (4 * DiffLIwithTP) + (5 * calArea) - (2 * Penalty);
 end

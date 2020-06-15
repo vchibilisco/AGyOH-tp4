@@ -21,13 +21,13 @@ maxTimeInitContainer = TimeProcess - 60;
 
 % Generation = 300;
 % TPop = 400;
-Generation = 200;
-TPop = 150;
+Generation = 150;
+TPop = 400;
 N = QuantityContainers;
 Elite = 1;
-XoverPercent = 60;
-MutPercent = 20;
-KeepPercent = 20;
+XoverPercent = 55;
+MutPercent = 15;
+KeepPercent = 30;
 K = 2;
 
 Bounds = [zeros(N, 1) (maxTimeInitContainer .* ones(N, 1))];
@@ -50,41 +50,42 @@ for i=1:TPop
 end
 % Recorremos Generaciones
 
-hold on;
+i = 9;
+% hold on;
 
-for z = 1:Generation
-  % Selección de la Elite
-  [PopElite] = GetElite(Pop,Elite);
-  % Selección por Torneo a toda la Población
-  Pop = Selection(Pop,K);
-  % Partición de la población
-  [PopXover, PopMut, PopKeep] = PopPartition(Pop,Elite,XoverPercent,MutPercent,KeepPercent);
-  % Selección y Cruzamiento
-  [newPopChildren] = Xover(PopXover);
-  % Mutación
-  [newPopMutation] = Mutation(PopMut,Bounds);
-  % Nueva Población
-  Pop = [newPopChildren;newPopMutation;PopKeep;PopElite];
-  % Aplica Función de Evaluación
-  for i=1:TPop
-    Pop(i, N+1) = EvalFunction(Pop(i, 1:N),TimeProcess);
-  end
-  [TheBestValue, pos] = max(Pop(:, N+1));
-  TheBestIndByGeneration = [TheBestIndByGeneration; Pop(pos,:)];
-  TheBestValueByGeneration = [TheBestValueByGeneration; TheBestValue];
-  MedPop = mean(Pop(:, N+1));
-  MedByGeneration = [ MedByGeneration ; MedPop];
-  xGen = [xGen z];
+    for z = 1:Generation
+      % Selección de la Elite
+      [PopElite] = GetElite(Pop,Elite);
+      % Selección por Torneo a toda la Población
+      Pop = Selection(Pop,K);
+      % Partición de la población
+      [PopXover, PopMut, PopKeep] = PopPartition(Pop,Elite,XoverPercent,MutPercent,KeepPercent);
+      % Selección y Cruzamiento
+      [newPopChildren] = Xover(PopXover);
+      % Mutación
+      [newPopMutation] = Mutation(PopMut,Bounds);
+      % Nueva Población
+      Pop = [newPopChildren;newPopMutation;PopKeep;PopElite];
+      % Aplica Función de Evaluación
+      for i=1:TPop
+        Pop(i, N+1) = EvalFunction(Pop(i, 1:N),TimeProcess);
+      end
+      [TheBestValue, pos] = max(Pop(:, N+1));
+      TheBestIndByGeneration = [TheBestIndByGeneration; Pop(pos,:)];
+      TheBestValueByGeneration = [TheBestValueByGeneration; TheBestValue];
+      MedPop = mean(Pop(:, N+1));
+      MedByGeneration = [ MedByGeneration ; MedPop];
+      xGen = [xGen z];
 
-  disp('--------------------------------------');
-  disp('Generación ');
-  disp(z);
-  disp(' Mejor Fitness: ');
-  disp(TheBestValue);
-  disp('--------------------------------------');
-end
-plot(xGen,TheBestValueByGeneration,xGen,MedByGeneration);
-%hold off;
+      disp('--------------------------------------');
+      disp('Generación ');
+      disp(z);
+      disp(' Mejor Fitness: ');
+      disp(TheBestValue);
+      disp('--------------------------------------');
+    end
+    plot(xGen,TheBestValueByGeneration,xGen,MedByGeneration);
+% hold off;
 
 EvaluateIndividualBasedOnTotalExecTime([TheBestIndByGeneration(Generation,1:N)], TimeProcess, 1);
  

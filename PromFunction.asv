@@ -1,0 +1,4 @@
+function [Result] = PromFunction(arrSteam)
+  Prom =  sum(arrSteam)/size(arrSteam,2);
+  Result = size(arrSteam,2) - sum(abs(arrSteam - Prom));
+end
